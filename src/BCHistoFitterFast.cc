@@ -49,7 +49,7 @@ double BcHistoFitterFast::LogLikelihood(const std::vector<double> & parameters)
 		
 		
 		// get the number of observed events
-		double y = fHistVec.at(iBin);
+		double Nobs = fHistVec.at(iBin);
 
 		double lambda = 0.;
 
@@ -60,11 +60,13 @@ double BcHistoFitterFast::LogLikelihood(const std::vector<double> & parameters)
 		}
 		else
 		{// use linear interpolation
-			lambda = (fUpEdges.at(iBin)-fLowEdges.at(iBin)) * (fedgehi + fedgelow)/2;
+			lambda = (fUpEdges.at(iBin)-fLowEdges.at(iBin))*(fedgelow+fedgehi)/2;
 		}
 
 		// get the value of the Poisson distribution
-		loglikelihood += BCMath::LogPoisson(y, lambda);
+		//loglikelihood += BCMath::LogPoisson(y, lambda);
+		
+		loglikelihood += Nobs*log(lambda) - lambda;
 	}
 
 	return loglikelihood;
